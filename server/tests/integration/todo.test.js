@@ -34,7 +34,7 @@ describe('/todos', () => {
       });
     });
   });
-
+   
   describe('POST /', () => {
     it('should create one todo item', () => {
       return request(app)
@@ -48,4 +48,22 @@ describe('/todos', () => {
         });
     });
   });
+
+  describe('DELETE /', () => { 
+    it('should return error for delete non-exist item', () => {
+      return request(app)
+      .delete('/non-exist')
+      .expect(404)
+      });
+    });
+
+    it('should return true  when delete 1 item', ()  => {
+      return ToDo.create({
+          subject: 'test',
+      }).then((item) => {
+          return request(app).delete(rootPath+'/'+item.id).expect((response) => {
+              return expect(response.body.delete).toEqual(true);
+          });
+    });
+    });
 });
